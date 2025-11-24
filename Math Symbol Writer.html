@@ -99,6 +99,14 @@
       <span class="muted">Turn off to convert live as you type.</span>
     </header>
 
+    <!-- Short explanation of how it works -->
+    <p class="muted" style="margin:0 0 16px 0;">
+      Type math using plain-text commands (for example: <code>alpha</code>, <code>x^2</code>, <code>a//b</code>, <code>sqrtx</code>, <code>&lt;=</code>, <code>sum i=1..n</code>).
+      The writer automatically turns those commands into symbols (Greek letters, superscripts, subscripts, fractions, square roots, and more).
+      With “Enter-to-Confirm” on, press Enter to convert the last command into formatted math; with it off, symbols appear live while you type and Enter just adds a new line.
+      Use the Copy buttons to paste your formatted math into documents, homework, or slides.
+    </p>
+
     <section class="card">
       <div class="toggle">
         <label class="switch">
@@ -132,7 +140,7 @@
               sum ∑ · product/prod ∏ · integral/int ∫ · grad ∇ · partial ∂ · sqrt √ · inf ∞ · ohm Ω · pi π · times × · cdot · · deg ° · perp ⟂ · angle ∠ · nought → ₀
             </div>
             <div class="cmd"><b>Relations & arrows</b><br>
-              <= ≤ · >= ≥ · != ≠ · == ≡ · ~= ≈ · -> → · <- ← · <-> ↔ · to →
+              &lt;= ≤ · &gt;= ≥ · != ≠ · == ≡ · ~= ≈ · -&gt; → · &lt;- ← · &lt;-&gt; ↔ · to →
             </div>
             <div class="cmd"><b>Sup/Sub</b><br>
               x^10 → x¹⁰ · x^(n+1) → xⁿ⁺¹ · x_i → x<sub>i</sub> · y_(n+1) → y<sub>n+1</sub> · vnought → v₀
@@ -194,12 +202,12 @@
       </div>
     </section>
 
-    <!-- ↓↓↓ Added footer links here ↓↓↓ -->
+    <!-- ↓↓↓ Footer links ↓↓↓ -->
     <p style="text-align:center; margin:16px 0 32px;">
       <a href="privacy.html">Privacy Policy</a> |
       <a href="terms.html">Terms &amp; Conditions</a>
     </p>
-    <!-- ↑↑↑ Added footer links here ↑↑↑ -->
+    <!-- ↑↑↑ Footer links ↑↑↑ -->
 
   </div>
 
@@ -310,7 +318,7 @@ function getTailForMatching(){
   const caret=getCaretOffset(ed); const WIN=600; const start=Math.max(0,caret-WIN);
   const win=textSlice(ed,start,caret); const {text:winTrim}=rtrimSpacesZWSP(win);
   const k1=winTrim.lastIndexOf('\u200B'); const k2=winTrim.lastIndexOf('\n'); const cut=Math.max(k1,k2)+1;
-  return {tail:winTrim.slice(cut),absStart:start+cut};
+  return {tail:winTrim.slice(cut),absStart=start+cut};
 }
 function convertLastAtCaret(){
   if(isConverting) return false; isConverting=true;
