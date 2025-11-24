@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Algebra Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Nerdamer (symbolic algebra, factoring, solving) -->
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/all.min.js"></script>
+
+  <style>
+    :root {
+      --bg-main: #050608;
+      --bg-panel: #141618;
+      --accent: #47f5ff;
+      --accent-soft: #2dd6ff33;
+      --border-soft: #3c3f44;
+      --text-main: #f8f9fb;
+      --text-muted: #c5c7ce;
+      --danger: #ff6b81;
+      --shadow-soft: 0 0 24px rgba(0, 0, 0, 0.6);
+      --radius-lg: 16px;
+      --radius-sm: 10px;
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #11141c 0, #050608 50%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px 64px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(145deg, #111316, #050608 60%, #161920);
+      border-radius: 24px;
+      padding: 32px 32px 40px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid #24272f;
+    }
+
+    .app-title {
+      text-align: center;
+      font-size: clamp(2.4rem, 4vw, 3.1rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      text-shadow: 0 0 22px rgba(71, 245, 255, 0.46);
+      margin-bottom: 30px;
+    }
+
+    .input-row {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .expression-input {
+      width: 100%;
+      padding: 18px 20px;
+      font-size: 1.2rem;
+      border-radius: 999px;
+      border: 2px solid var(--border-soft);
+      background: #191c20;
+      color: var(--text-main);
+      outline: none;
+      box-shadow: 0 0 0 1px #000;
+      transition: border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast),
+        transform var(--transition-fast);
+    }
+
+    .expression-input::placeholder {
+      color: #6f737c;
+    }
+
+    .expression-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-soft), 0 0 18px rgba(71, 245, 255, 0.3);
+      background: #1d2025;
+      transform: translateY(-1px);
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      min-width: 170px;
+      padding: 13px 26px;
+      border-radius: 999px;
+      border: 2px solid #ffffff;
+      background: var(--accent);
+      color: #022024;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(71, 245, 255, 0.55);
+      transition: transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast),
+        border-color var(--transition-fast);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 0 26px rgba(71, 245, 255, 0.7);
+      background: #5af6ff;
+      border-color: #f0feff;
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.99);
+      box-shadow: 0 0 14px rgba(71, 245, 255, 0.45);
+    }
+
+    .btn-secondary {
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: rgba(15, 18, 22, 0.9);
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background var(--transition-fast),
+        border-color var(--transition-fast),
+        transform var(--transition-fast);
+    }
+
+    .btn-secondary:hover {
+      background: #20242b;
+      border-color: #3c4048;
+      transform: translateY(-1px);
+    }
+
+    .steps-section {
+      margin-top: 34px;
+      padding-top: 18px;
+      border-top: 1px solid #272a31;
+    }
+
+    .steps-title {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(71, 245, 255, 0.35);
+    }
+
+    .steps-subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .steps-card {
+      background: #101317;
+      border-radius: var(--radius-lg);
+      border: 1px solid #262a33;
+      padding: 18px 24px;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.65);
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    .steps-list {
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps-list li {
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+      font-size: 1.02rem;
+      color: var(--text-main);
+    }
+
+    .steps-list li::before {
+      counter-increment: step;
+      content: counter(step) ".";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-weight: 700;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(71, 245, 255, 0.4);
+    }
+
+    .step-muted {
+      color: var(--text-muted);
+    }
+
+    .step-error {
+      color: var(--danger);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: #8a8f99;
+      text-align: center;
+    }
+
+    .footer-note code {
+      background: #151920;
+      padding: 3px 7px;
+      border-radius: 6px;
+      border: 1px solid #262a33;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 24px 16px 30px;
+      }
+      .steps-card {
+        padding: 16px 16px;
+      }
+      .steps-title {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h1 class="app-title">Algebra Calculator</h1>
+
+    <div class="input-row">
+      <input
+        id="expression-input"
+        class="expression-input"
+        type="text"
+        autocomplete="off"
+        placeholder="Type an expression or equation, e.g.  x^2 + x - 6   or   x^2 + 5x + 6 = 0"
+      />
+
+      <div class="controls-row">
+        <button id="solve-btn" class="btn-primary">Solve</button>
+        <button id="clear-btn" class="btn-secondary">Clear</button>
+      </div>
+    </div>
+
+    <section class="steps-section">
+      <h2 class="steps-title">Solution Steps:</h2>
+      <p class="steps-subtitle">
+        Shows simplification, factoring, and (for equations) solutions step-by-step.
+      </p>
+
+      <div class="steps-card">
+        <ol id="steps-list" class="steps-list">
+          <li class="step-muted">
+            Enter an expression above and press <strong>Solve</strong> or hit
+            <strong>Enter</strong>.
+          </li>
+        </ol>
+      </div>
+
+      <p class="footer-note">
+        Examples:
+        <code>x^2 + x - 6</code>,
+        <code>(x^2 - 1)/(x - 1)</code>,
+        <code>x^2 + 5x + 6 = 0</code>,
+        <code>2x + 3 = 11</code>
+      </p>
+    </section>
+  </div>
+
+  <script>
+    // Helper to append a step line
+    function addStep(text, cssClass) {
+      const list = document.getElementById('steps-list');
+      const li = document.createElement('li');
+      li.textContent = text;
+      if (cssClass) li.classList.add(cssClass);
+      list.appendChild(li);
+    }
+
+    // Detect if the user entered an equation (has '=')
+    function isEquation(str) {
+      return str.includes('=');
+    }
+
+    // Rough variable detector: first letter a-z/A-Z
+    function detectVariable(str) {
+      const match = str.match(/[a-zA-Z]/);
+      return match ? match[0] : null;
+    }
+
+    function clearSteps() {
+      const list = document.getElementById('steps-list');
+      list.innerHTML = '';
+    }
+
+    function handleExpression(expr) {
+      clearSteps();
+      addStep('Start with the expression: ' + expr);
+
+      let simplified = expr;
+      let factored = null;
+
+      try {
+        simplified = nerdamer('simplify(' + expr + ')').toString();
+      } catch (e) {
+        // If simplify fails, keep original
+      }
+
+      if (simplified !== expr) {
+        addStep('Simplify the expression: ' + simplified);
+      }
+
+      try {
+        factored = nerdamer('factor(' + simplified + ')').toString();
+      } catch (e) {
+        factored = null;
+      }
+
+      if (factored && factored !== simplified) {
+        addStep('Factor the expression: ' + factored);
+      }
+
+      if (simplified === expr && (!factored || factored === simplified)) {
+        addStep(
+          'Expression is already in simplest/factored form (no further simplification detected).',
+          'step-muted'
+        );
+      }
+    }
+
+    function handleEquation(equationStr) {
+      clearSteps();
+      addStep('Start with the equation: ' + equationStr);
+
+      const variable = detectVariable(equationStr) || 'x';
+      addStep('We will solve for: ' + variable);
+
+      let solutions = null;
+
+      try {
+        // Solve single equation for one variable
+        solutions = nerdamer.solve(equationStr, variable);
+      } catch (e) {
+        solutions = null;
+      }
+
+      if (solutions && typeof solutions.toString === 'function') {
+        const solText = solutions.toString();
+        if (solText && solText !== '[]') {
+          addStep('Solve the equation for ' + variable + ': ' + solText);
+        } else {
+          addStep(
+            'No explicit solution found for ' + variable + ' (try a different form).',
+            'step-muted'
+          );
+        }
+      } else {
+        addStep(
+          'Could not solve this equation symbolically. Check your input or try a simpler equation.',
+          'step-error'
+        );
+      }
+    }
+
+    function solveInput() {
+      const inputEl = document.getElementById('expression-input');
+      const raw = inputEl.value.trim();
+
+      clearSteps();
+
+      if (!raw) {
+        addStep('Please type an expression or equation first.', 'step-muted');
+        return;
+      }
+
+      // Basic safety: make sure nerdamer loaded
+      if (typeof nerdamer === 'undefined') {
+        addStep(
+          'Error: math engine failed to load. Check your internet connection and refresh.',
+          'step-error'
+        );
+        return;
+      }
+
+      try {
+        if (isEquation(raw)) {
+          handleEquation(raw);
+        } else {
+          handleExpression(raw);
+        }
+      } catch (err) {
+        console.error(err);
+        clearSteps();
+        addStep(
+          'Something went wrong while processing your input. Please check for typos (like mismatched parentheses) and try again.',
+          'step-error'
+        );
+      }
+    }
+
+    // Wire up buttons and Enter key
+    document.getElementById('solve-btn').addEventListener('click', solveInput);
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      document.getElementById('expression-input').value = '';
+      clearSteps();
+      addStep(
+        'Enter an expression above and press Solve or hit Enter.',
+        'step-muted'
+      );
+    });
+
+    document
+      .getElementById('expression-input')
+      .addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault(); // prevent form-style submission / line break
+          solveInput();
+        }
+      });
+  </script>
+</body>
+</html>

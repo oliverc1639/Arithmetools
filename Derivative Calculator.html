@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Derivative Calculator</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Math.js (symbolic + numeric) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+
+  <!-- MathJax for nicer math output -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script"
+          async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg: #020617;
+      --panel-soft: #020617;
+      --panel-mid: #0b1220;
+      --border: #1f2937;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --button-bg: #111827;
+      --button-bg-hover: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1100px;
+      background: radial-gradient(circle at top left, #0f172a, #020617 55%);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.9);
+      padding: 1.8rem 2rem 2rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin: 0;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .mode-pills {
+      display: inline-flex;
+      padding: 0.25rem;
+      border-radius: 999px;
+      background-color: var(--panel-mid);
+      border: 1px solid var(--border);
+    }
+
+    .pill {
+      position: relative;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      user-select: none;
+    }
+
+    .pill input {
+      display: none;
+    }
+
+    .pill span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background-color: #4b5563;
+    }
+
+    .pill.active {
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .pill.active span.dot {
+      background-color: var(--accent);
+    }
+
+    /* Layout */
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(260px, 1.4fr);
+      gap: 1.75rem;
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left panel */
+    .panel {
+      background-color: var(--panel-mid);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.75rem;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 10px;
+      border: 1px solid #111827;
+      background-color: var(--panel-soft);
+      color: var(--text-main);
+      padding: 0.75rem 0.9rem;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+    }
+
+    textarea::placeholder {
+      color: #4b5563;
+    }
+
+    .row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .row label {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    .row input[type="text"] {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid #111827;
+      background-color: var(--panel-soft);
+      color: var(--text-main);
+      font-size: 0.9rem;
+    }
+
+    .row input::placeholder {
+      color: #4b5563;
+    }
+
+    .btn-row {
+      margin-top: 0.9rem;
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      background-color: var(--button-bg);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #22c1c3, #38bdf8);
+      color: #0b1120;
+    }
+
+    button.primary:hover {
+      filter: brightness(1.05);
+    }
+
+    button.secondary {
+      background-color: var(--panel-soft);
+      border: 1px solid var(--border);
+    }
+
+    button.secondary:hover {
+      background-color: var(--button-bg-hover);
+    }
+
+    /* Output */
+    .output-block {
+      margin-top: 1.1rem;
+      padding: 0.85rem 0.9rem;
+      border-radius: 10px;
+      background-color: var(--panel-soft);
+      border: 1px dashed var(--border);
+    }
+
+    .output-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 0.35rem;
+    }
+
+    #result {
+      font-size: 1rem;
+      word-wrap: break-word;
+      min-height: 1.2em;
+    }
+
+    .steps {
+      margin-top: 0.9rem;
+      border-top: 1px solid var(--border);
+      padding-top: 0.7rem;
+    }
+
+    .steps-title {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    #steps-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      font-size: 0.85rem;
+    }
+
+    #steps-list li + li {
+      margin-top: 0.25rem;
+    }
+
+    /* Calculator panel */
+    .calc-panel {
+      background-color: var(--panel-soft);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 1.1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .calc-header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .calc-display {
+      width: 100%;
+      border-radius: 10px;
+      background-color: var(--panel-mid);
+      border: 1px solid #111827;
+      padding: 0.55rem 0.7rem;
+      font-family: "JetBrains Mono", ui-monospace;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.4rem;
+    }
+
+    .key {
+      border-radius: 10px;
+      border: 1px solid #111827;
+      background-color: var(--panel-mid);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      padding: 0.55rem 0;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .key:hover {
+      background-color: var(--button-bg-hover);
+    }
+
+    .key.accent {
+      background-color: var(--accent-soft);
+      border-color: #0ea5e9;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="title-group">
+        <h1>Derivative Calculator</h1>
+        <div class="subtitle">Symbolic derivatives with a clean dark theme.</div>
+      </div>
+
+      <div class="mode-pills" id="modePills">
+        <label class="pill active">
+          <input type="radio" name="mode" value="single" checked />
+          <span class="dot"></span>
+          Single-variable
+        </label>
+        <label class="pill">
+          <input type="radio" name="mode" value="multi" />
+          <span class="dot"></span>
+          Multivariable
+        </label>
+      </div>
+    </header>
+
+    <div class="main">
+      <!-- LEFT: input + output -->
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Input</div>
+          <div class="hint">Type your function, choose a variable, press Enter or click Differentiate.</div>
+        </div>
+
+        <textarea id="expression"
+                  placeholder="Examples:
+x^2 * sin(x)
+e^(3x) + x^3
+x^2 * y + sin(y)">
+        </textarea>
+
+        <div class="row">
+          <label for="variable">Differentiate w.r.t:</label>
+          <input id="variable"
+                 type="text"
+                 placeholder="Leave blank for x (e.g. x, y, z)" />
+        </div>
+
+        <div class="btn-row">
+          <button class="primary" id="btnDifferentiate">Differentiate</button>
+          <button class="secondary" id="btnClear">Clear</button>
+        </div>
+
+        <div class="output-block">
+          <div class="output-label">Result</div>
+          <div id="result">–</div>
+
+          <div class="steps">
+            <div class="steps-title">Steps</div>
+            <ul id="steps-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: independent calculator -->
+      <aside class="calc-panel">
+        <div class="calc-header">
+          <span>Calculator</span>
+        </div>
+        <div class="calc-display" id="calcDisplay">0</div>
+
+        <div class="keypad">
+          <div class="key" data-insert="7">7</div>
+          <div class="key" data-insert="8">8</div>
+          <div class="key" data-insert="9">9</div>
+          <div class="key accent" data-insert="+">+</div>
+
+          <div class="key" data-insert="4">4</div>
+          <div class="key" data-insert="5">5</div>
+          <div class="key" data-insert="6">6</div>
+          <div class="key accent" data-insert="-">−</div>
+
+          <div class="key" data-insert="1">1</div>
+          <div class="key" data-insert="2">2</div>
+          <div class="key" data-insert="3">3</div>
+          <div class="key accent" data-insert="*">×</div>
+
+          <div class="key" data-insert="0">0</div>
+          <div class="key" data-insert=".">.</div>
+          <div class="key" data-insert="(">(</div>
+          <div class="key" data-insert=")">)</div>
+
+          <div class="key" data-insert="sin(">sin</div>
+          <div class="key" data-insert="cos(">cos</div>
+          <div class="key" data-insert="tan(">tan</div>
+          <div class="key" data-insert="ln(">ln</div>
+
+          <div class="key accent" data-insert="/">÷</div>
+          <div class="key accent" data-insert="^">^</div>
+          <div class="key accent" id="keyEquals">=</div>
+          <div class="key" id="keyBackspace">⌫</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const exprInput = document.getElementById("expression");
+      const varInput = document.getElementById("variable");
+      const resultEl = document.getElementById("result");
+      const stepsList = document.getElementById("steps-list");
+      const btnDifferentiate = document.getElementById("btnDifferentiate");
+      const btnClear = document.getElementById("btnClear");
+      const calcDisplay = document.getElementById("calcDisplay");
+      const keypad = document.querySelector(".keypad");
+      const modePills = document.getElementById("modePills");
+
+      /* --- independent calculator state --- */
+      let calcExpr = "";
+
+      function updateCalcDisplay() {
+        calcDisplay.textContent = calcExpr === "" ? "0" : calcExpr;
+      }
+
+      keypad.addEventListener("click", (e) => {
+        const key = e.target.closest(".key");
+        if (!key) return;
+
+        // Backspace
+        if (key.id === "keyBackspace") {
+          calcExpr = calcExpr.slice(0, -1);
+          updateCalcDisplay();
+          return;
+        }
+
+        // Equals: evaluate the expression
+        if (key.id === "keyEquals") {
+          if (!calcExpr.trim()) {
+            calcDisplay.textContent = "0";
+            return;
+          }
+          try {
+            const res = math.evaluate(calcExpr);
+            calcExpr = String(res);
+            updateCalcDisplay();
+          } catch (err) {
+            calcDisplay.textContent = "Error";
+          }
+          return;
+        }
+
+        const toInsert = key.getAttribute("data-insert");
+        if (toInsert) {
+          calcExpr += toInsert;
+          updateCalcDisplay();
+        }
+      });
+
+      /* --- mode pills just change placeholder / styling --- */
+      modePills.addEventListener("change", () => {
+        const selected = modePills.querySelector("input[name='mode']:checked");
+        const pills = modePills.querySelectorAll(".pill");
+        pills.forEach((pill) => pill.classList.remove("active"));
+        selected.closest(".pill").classList.add("active");
+
+        if (selected.value === "single") {
+          varInput.placeholder = "Leave blank for x (e.g. x)";
+        } else {
+          varInput.placeholder = "Specify variable (e.g. x, y, z)";
+        }
+      });
+
+      function clearSteps() {
+        stepsList.innerHTML = "";
+      }
+
+      function addStep(text) {
+        const li = document.createElement("li");
+        li.textContent = text;
+        stepsList.appendChild(li);
+      }
+
+      function computeDerivative() {
+        const expr = exprInput.value.trim();
+        const variable = (varInput.value.trim() || "x").trim();
+
+        clearSteps();
+
+        if (!expr) {
+          resultEl.textContent = "Please enter a function to differentiate.";
+          return;
+        }
+
+        try {
+          const derivativeNode = math.derivative(expr, variable);
+          const derivativeStr = derivativeNode.toString();
+
+          addStep(`Treat the input as a function of ${variable}.`);
+          addStep(`Apply differentiation rules with respect to ${variable}.`);
+          addStep("Simplify the resulting expression.");
+
+          // Pretty output with MathJax
+          try {
+            const texOriginal = math.parse(expr).toTex({ parenthesis: "auto" });
+            const texDeriv = derivativeNode.toTex({ parenthesis: "auto" });
+            resultEl.innerHTML =
+              `\\( f(${variable}) = ${texOriginal} \\) <br>` +
+              `\\( \\dfrac{df}{d${variable}} = ${texDeriv} \\)`;
+            if (window.MathJax && MathJax.typesetPromise) {
+              MathJax.typesetPromise();
+            }
+          } catch {
+            resultEl.textContent = `df/d${variable} = ${derivativeStr}`;
+          }
+        } catch (err) {
+          resultEl.textContent = "Error: " + err.message;
+          clearSteps();
+        }
+      }
+
+      function clearAll() {
+        exprInput.value = "";
+        varInput.value = "";
+        resultEl.textContent = "–";
+        clearSteps();
+        exprInput.focus();
+      }
+
+      // Buttons
+      btnDifferentiate.addEventListener("click", computeDerivative);
+      btnClear.addEventListener("click", clearAll);
+
+      // ENTER behavior:
+      //   Enter        => differentiate
+      //   Shift+Enter  => newline in textarea
+      exprInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          computeDerivative();
+        }
+      });
+
+      // Enter in w.r.t box also differentiates
+      varInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          computeDerivative();
+        }
+      });
+
+      // Initial display for calculator
+      updateCalcDisplay();
+      exprInput.focus();
+    });
+  </script>
+</body>
+</html>
