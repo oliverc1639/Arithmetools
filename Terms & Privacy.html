@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Terms & Privacy | Arithmetic Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Optional: Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-main: #050816;
+      --bg-card: #0b1020;
+      --bg-card-soft: #080b18;
+      --accent: #38bdf8;       /* cyan */
+      --accent-soft: #a855f7;  /* purple */
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.2);
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.8);
+      --radius-xl: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 55%),
+        radial-gradient(circle at top right, rgba(168, 85, 247, 0.18), transparent 55%),
+        radial-gradient(circle at bottom, rgba(56, 189, 248, 0.1), transparent 55%),
+        var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1080px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.06), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.05), transparent 55%),
+                  rgba(6, 8, 23, 0.95);
+      border-radius: 32px;
+      padding: 28px 24px 32px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .label-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), transparent 60%),
+                  rgba(15, 23, 42, 0.85);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
+
+    .label-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.8);
+    }
+
+    h1 {
+      font-size: 26px;
+      letter-spacing: 0.03em;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 span.logo-glyph {
+      width: 30px;
+      height: 30px;
+      border-radius: 15px;
+      background: radial-gradient(circle at 30% 20%, #e0f2fe, #38bdf8 35%, #0f172a 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.9);
+      font-size: 18px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+
+    .back-link {
+      align-self: flex-start;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.35), transparent 60%),
+                  rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      color: #e0f2fe;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.7);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.9);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.45), transparent 60%),
+                  rgba(15, 23, 42, 0.98);
+    }
+
+    .back-link span.icon {
+      font-size: 15px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.05), transparent 65%),
+                  radial-gradient(circle at bottom, rgba(168, 85, 247, 0.08), transparent 60%),
+                  var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 20px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 70vh;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-soft);
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      white-space: nowrap;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .scroll-area {
+      margin-top: 6px;
+      padding: 10px 10px 4px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(148, 163, 184, 0.7) transparent;
+    }
+
+    .scroll-area::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .scroll-area::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scroll-area::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.7);
+      border-radius: 999px;
+    }
+
+    section {
+      margin-bottom: 16px;
+    }
+
+    section:last-child {
+      margin-bottom: 0;
+    }
+
+    section h2 {
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #e5e7eb;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      font-weight: 600;
+    }
+
+    section p,
+    section li {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin-top: 4px;
+      padding-left: 0;
+    }
+
+    .bullet-list li {
+      padding-left: 16px;
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .bullet-list li::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      top: 0;
+      color: var(--accent);
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .highlight {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .legal-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-style: italic;
+      border-top: 1px dashed rgba(148, 163, 184, 0.35);
+      padding-top: 8px;
+    }
+
+    .meta-footer {
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .page {
+        padding: 22px 16px 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .back-link {
+        align-self: stretch;
+        justify-content: center;
+      }
+      h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="title-block">
+        <div class="label-pill">
+          <span class="label-dot"></span>
+          <span>Math Toolkit</span>
+        </div>
+        <h1>
+          <span class="logo-glyph">Σ</span>
+          <span>Terms & Privacy</span>
+        </h1>
+        <p class="subtitle">
+          This page explains how Arithmetic Tools (“we”, “our”, or “us”) works,
+          what you agree to when you use it, and how we handle information.
+        </p>
+      </div>
+
+      <!-- Change href to your landing page -->
+      <a href="index.html" class="back-link">
+        <span class="icon">←</span>
+        <span>Back to tools</span>
+      </a>
+    </header>
+
+    <main>
+      <!-- TERMS OF USE -->
+      <div class="card" id="terms">
+        <div class="card-header">
+          <div class="card-title-block">
+            <span class="card-eyebrow">Core</span>
+            <div class="card-title">Terms of Use</div>
+          </div>
+          <span class="tag">Last updated: <span class="highlight">[Month Day, Year]</span></span>
+        </div>
+
+        <div class="scroll-area">
+          <section>
+            <h2>1. Acceptance of Terms</h2>
+            <p>
+              By accessing or using <span class="highlight">Arithmetic Tools</span> (including the
+              Algebra Calculator, Derivative Calculator, Graphing Calculator,
+              Integral Calculator, and any related tools), you agree to these
+              Terms of Use. If you do not agree, please do not use the site.
+            </p>
+          </section>
+
+          <section>
+            <h2>2. Educational Use Only</h2>
+            <p>
+              Arithmetic Tools is designed for learning and practice. We do not
+              guarantee that any solution or explanation is correct, complete,
+              or appropriate for your specific situation.
+            </p>
+            <ul class="bullet-list">
+              <li>Do not rely on the tools for exams, graded work, or professional advice.</li>
+              <li>Always double-check results and reasoning on your own or with a teacher/tutor.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>3. Acceptable Use</h2>
+            <p>You agree <span class="highlight">not</span> to:</p>
+            <ul class="bullet-list">
+              <li>Use the site in a way that violates any local, state, national, or international law.</li>
+              <li>Attempt to interfere with or overload our servers or security.</li>
+              <li>Reverse engineer, scrape, or automate access in a way that harms performance.</li>
+              <li>Upload or share content that is unlawful, abusive, or otherwise inappropriate.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>4. Accounts & Access</h2>
+            <p>
+              Some features may require an account or integration with third-party services.
+              You are responsible for maintaining the confidentiality of your login information
+              and for all activity under your account.
+            </p>
+          </section>
+
+          <section>
+            <h2>5. Intellectual Property</h2>
+            <p>
+              All content on this site (design, layout, logos, interface text, and custom code)
+              is owned by the site owner or used with permission, except where third-party
+              libraries clearly apply (for example, math libraries or UI frameworks).
+            </p>
+            <p>
+              You may use the tools for personal, non-commercial educational purposes.
+              You may not copy, redistribute, or sell the site or any significant portion
+              of it without written permission.
+            </p>
+          </section>
+
+          <section>
+            <h2>6. Third-Party Services</h2>
+            <p>
+              Arithmetic Tools may use third-party services such as analytics providers
+              or ad networks (for example, Google Analytics or Google AdSense).
+              These services may collect information as described in the Privacy Policy below.
+              We are not responsible for the terms or policies of third-party services.
+            </p>
+          </section>
+
+          <section>
+            <h2>7. Disclaimers</h2>
+            <p>
+              The site is provided on an “<span class="highlight">as-is</span>” and “<span class="highlight">as-available</span>”
+              basis. We make no warranties of any kind, expressed or implied, including,
+              but not limited to, accuracy of results, fitness for a particular purpose,
+              or non-infringement.
+            </p>
+          </section>
+
+          <section>
+            <h2>8. Limitation of Liability</h2>
+            <p>
+              To the fullest extent permitted by law, we are not liable for any indirect,
+              incidental, special, consequential, or punitive damages, or any loss of data,
+              profits, or other intangible losses, arising from your use of (or inability
+              to use) the site.
+            </p>
+          </section>
+
+          <section>
+            <h2>9. Changes to the Service</h2>
+            <p>
+              We may update, suspend, or discontinue any part of Arithmetic Tools at any time
+              without notice. We may also update these Terms of Use. If changes are material,
+              we may update the “Last updated” date and/or provide additional notice.
+            </p>
+          </section>
+
+          <section>
+            <h2>10. Contact</h2>
+            <p>
+              If you have questions about these Terms of Use, you can reach us at:
+              <span class="highlight">[your-contact-email@example.com]</span>.
+            </p>
+          </section>
+
+          <div class="legal-note">
+            This page is a general template and does not constitute legal advice.
+            For full compliance with laws in your region, you should review it with a qualified attorney.
+          </div>
+        </div>
+      </div>
+
+      <!-- PRIVACY POLICY -->
+      <div class="card" id="privacy">
+        <div class="card-header">
+          <div class="card-title-block">
+            <span class="card-eyebrow">Utility</span>
+            <div class="card-title">Privacy Policy</div>
+          </div>
+          <span class="tag">Your data, explained</span>
+        </div>
+
+        <div class="scroll-area">
+          <section>
+            <h2>1. Overview</h2>
+            <p>
+              This Privacy Policy explains what information we collect when you use
+              <span class="highlight">Arithmetic Tools</span>, how we use it, and what choices
+              you have. By using the site, you agree to the practices described here.
+            </p>
+          </section>
+
+          <section>
+            <h2>2. Information We Collect</h2>
+            <p>We may collect the following categories of information:</p>
+            <ul class="bullet-list">
+              <li><span class="highlight">Usage data</span>: pages visited, buttons clicked, features used, and basic diagnostics.</li>
+              <li><span class="highlight">Device & log data</span>: IP address, browser type, approximate location, timestamps, and error logs.</li>
+              <li><span class="highlight">Optional info you provide</span>: feedback you send us, forms you complete, or email you share if you contact us.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>3. Cookies & Similar Technologies</h2>
+            <p>
+              We may use cookies and similar technologies to:
+            </p>
+            <ul class="bullet-list">
+              <li>Remember basic preferences (such as theme or recent tools).</li>
+              <li>Analyze how the site is used so we can improve performance and design.</li>
+              <li>Support advertising or measurement when third-party ad networks are enabled.</li>
+            </ul>
+            <p>
+              You can usually disable cookies through your browser settings, but some
+              features of the site may not work correctly if you do.
+            </p>
+          </section>
+
+          <section>
+            <h2>4. Analytics & Advertising Partners</h2>
+            <p>
+              Arithmetic Tools may use analytics and advertising services operated by
+              third parties (for example, Google Analytics or Google AdSense).
+              These services may collect information from your browser, such as the
+              pages you visit, your IP address, and identifiers stored in cookies.
+            </p>
+            <p>
+              These third parties use this data to measure traffic, understand usage patterns,
+              and serve relevant ads. Their use of information is controlled by their own
+              privacy policies, not ours.
+            </p>
+          </section>
+
+          <section>
+            <h2>5. How We Use Information</h2>
+            <p>We use collected information to:</p>
+            <ul class="bullet-list">
+              <li>Operate, maintain, and secure the website.</li>
+              <li>Fix bugs, improve performance, and design better features.</li>
+              <li>Understand which tools (algebra, calculus, graphing, etc.) are most helpful.</li>
+              <li>Respond to messages or support requests you send us.</li>
+              <li>Show general or personalized advertising when applicable.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>6. Sharing of Information</h2>
+            <p>
+              We do not sell your personal information. We may share limited data with:
+            </p>
+            <ul class="bullet-list">
+              <li><span class="highlight">Service providers</span> who help us run the site (hosting, analytics, error logging).</li>
+              <li><span class="highlight">Advertising partners</span> that display ads or measure ad performance.</li>
+              <li><span class="highlight">Legal authorities</span> when required by law or to protect our rights and users.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>7. Data Retention</h2>
+            <p>
+              We keep usage and log data for as long as reasonably necessary to operate the site,
+              analyze performance, and meet legal or security obligations. When data is no longer needed,
+              we take steps to delete or anonymize it.
+            </p>
+          </section>
+
+          <section>
+            <h2>8. Your Choices</h2>
+            <p>You typically have the ability to:</p>
+            <ul class="bullet-list">
+              <li>Adjust your browser settings to block or delete cookies.</li>
+              <li>Use private browsing modes to limit what is stored locally.</li>
+              <li>Opt out of certain interest-based advertising via your browser or device settings.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>9. Children’s Privacy</h2>
+            <p>
+              Arithmetic Tools is not intentionally directed at children under 13 years of age
+              (or a higher age where required by local law). If you believe we have collected
+              information from a child without proper consent, please contact us so we can remove it.
+            </p>
+          </section>
+
+          <section>
+            <h2>10. International Users</h2>
+            <p>
+              If you access the site from outside the country where our servers are located,
+              your information may be transferred across borders and processed in a different
+              jurisdiction, which may have different data-protection laws than your region.
+            </p>
+          </section>
+
+          <section>
+            <h2>11. Changes to This Policy</h2>
+            <p>
+              We may update this Privacy Policy from time to time. When we do, we will change the
+              “Last updated” date at the top of this page. In some cases, we may provide additional
+              notice (such as a banner or pop-up inside the site).
+            </p>
+          </section>
+
+          <section>
+            <h2>12. Contact</h2>
+            <p>
+              If you have questions or requests related to this Privacy Policy, you can contact us at:
+              <span class="highlight">[your-contact-email@example.com]</span>.
+            </p>
+          </section>
+
+          <div class="legal-note">
+            This Privacy Policy is a general template and may need adjustments for your
+            specific use, especially if you have users in regions with special laws (for example,
+            the EU or California). Consider consulting a privacy professional or attorney
+            before relying on it.
+          </div>
+        </div>
+
+        <div class="meta-footer">
+          <span>Arithmetic Tools &copy; <span class="highlight">[Year]</span></span>
+          <span>Math toolkit · Study helper · Not a substitute for your own brain 🧠</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
