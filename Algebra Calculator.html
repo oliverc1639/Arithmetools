@@ -72,7 +72,33 @@
       letter-spacing: 0.08em;
       color: var(--accent);
       text-shadow: 0 0 22px rgba(71, 245, 255, 0.46);
-      margin-bottom: 30px;
+      margin-bottom: 18px;
+    }
+
+    .how-it-works {
+      margin-bottom: 26px;
+      padding: 14px 18px;
+      background: #101318;
+      border-radius: var(--radius-lg);
+      border: 1px solid #262a33;
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.55);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .how-it-works strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .how-it-works code {
+      background: #151920;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid #262a33;
+      font-size: 0.85rem;
+      color: var(--text-main);
     }
 
     .input-row {
@@ -251,12 +277,26 @@
       .steps-title {
         font-size: 1.6rem;
       }
+      .how-it-works {
+        font-size: 0.9rem;
+        padding: 12px 14px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app-container">
     <h1 class="app-title">Algebra Calculator</h1>
+
+    <div class="how-it-works">
+      <strong>How this tool works:</strong>
+      Type an algebra expression or equation into the box below and press
+      <strong>Solve</strong> (or hit <strong>Enter</strong>). The calculator
+      will try to simplify, factor, and, if there is an <code>=</code> sign,
+      solve for the main variable. Use <code>^</code> for powers (for example,
+      <code>x^2 + 5x + 6 = 0</code>) and <code>/</code> for fractions.
+      Your steps and results will appear in the panel underneath.
+    </div>
 
     <div class="input-row">
       <input
