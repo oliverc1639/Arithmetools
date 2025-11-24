@@ -30,7 +30,15 @@
       padding: 2rem;
     }
     h1 {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    #description {
+      max-width: 700px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ddd;
+      margin-bottom: 1.25rem;
+      line-height: 1.4;
     }
     #graph {
       border: 1px solid #444;
@@ -102,6 +110,13 @@
 </head>
 <body>
   <h1>Graphing Calculator</h1>
+  <p id="description">
+    This tool lets you quickly graph one or more functions on an interactive grid. Type your function(s)
+    in the box below and they will be graphed in real time. You can drag on the graph to move the view,
+    use your mouse wheel or trackpad to zoom in and out, switch between radians and degrees for trig
+    functions with the mode button, and use “Define Intersection” to find where the first two graphs cross.
+  </p>
+
   <canvas id="graph" width="800" height="600"></canvas>
   <div id="coords">x: 0.00, y: 0.00</div>
 
