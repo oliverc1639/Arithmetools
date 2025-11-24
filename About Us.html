@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About Us | Arithmetools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CRTYR8VCRG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CRTYR8VCRG');
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5494314750287277"
+      crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg-main: #050816;
+      --bg-card: #0b1020;
+      --accent: #38bdf8;   /* cyan */
+      --accent-soft: #a855f7; /* purple */
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2933;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+      --radius-xl: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 900px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(168, 85, 247, 0.12));
+      border-radius: 24px;
+      padding: 2px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .page-inner {
+      border-radius: 22px;
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%, #000 100%);
+      padding: 28px 22px 26px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brand-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-title span.logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 30%;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #4c1d95 100%);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.8);
+      font-size: 1.1rem;
+    }
+
+    .brand-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    section {
+      background: radial-gradient(circle at top left, #020617 0, #020617 70%);
+      border-radius: var(--radius-xl);
+      padding: 16px 16px 14px;
+      border: 1px solid rgba(15, 23, 42, 0.9);
+    }
+
+    section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    section p {
+      color: var(--text-muted);
+    }
+
+    ul {
+      margin: 8px 0 0 18px;
+      color: var(--text-muted);
+    }
+
+    ul li {
+      margin-bottom: 4px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #7dd3fc;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+    }
+
+    .back-link {
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .page-inner {
+        padding: 20px 16px 18px;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="page-inner">
+      <header>
+        <div class="brand-block">
+          <div class="brand-title">
+            <span class="logo-mark">∑</span>
+            <span>Arithmetools</span>
+          </div>
+          <div class="brand-subtitle">
+            About the creator and the tools behind this site.
+          </div>
+        </div>
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>Built for students &amp; self-learners</span>
+        </div>
+      </header>
+
+      <main>
+        <section>
+          <h2>Who I Am</h2>
+          <p>
+            My name is <strong>Oliver C.</strong> and I’m a college student studying mechanical engineering.
+            I enjoy creating different studying tools that make it easier and faster to work through math problems,
+            especially when I’m deep into homework or exam prep.
+          </p>
+        </section>
+
+        <section>
+          <h2>Why I Created Arithmetools</h2>
+          <p>
+            I originally built these tools just for myself, so I could have quick access to the calculators and
+            helpers I use the most while studying. Over time, I realized that other students and self-learners
+            might be struggling with the same things I was, so I decided to make Arithmetools public.
+          </p>
+          <p style="margin-top:8px;">
+            The goal is simple: keep everything <strong>in one place</strong>, organized, and easy to use, instead of
+            jumping between a bunch of different random calculators on the internet.
+            Arithmetools is meant for <strong>anyone who needs it</strong>—from middle and high school students up
+            through college and beyond, plus tutors or anyone reviewing math.
+          </p>
+        </section>
+
+        <section>
+          <h2>What You&rsquo;ll Find Here</h2>
+          <p>
+            Arithmetools brings several focused tools together on one site:
+          </p>
+          <ul>
+            <li><strong>Algebra Calculator</strong> – Simplify expressions, factor polynomials, and solve equations with step-by-step explanations.</li>
+            <li><strong>Derivative Calculator</strong> – Symbolic and numeric differentiation for single- and multi-variable functions, with steps.</li>
+            <li><strong>Graphing Calculator</strong> – Plot multiple functions, explore intersections, and switch between degree and radian modes.</li>
+            <li><strong>Integral Calculator</strong> – Compute definite and indefinite integrals, and view step-by-step antiderivatives.</li>
+            <li><strong>Math Symbol Writer</strong> – Type and format math symbols quickly, then copy them into your other tools or documents.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>How Arithmetools Is Built</h2>
+          <p>
+            I coded these tools myself with help from a few friends and coding assistants. A big focus for me is
+            not just giving an answer, but also showing the <strong>steps</strong> behind the result whenever possible,
+            so it can actually help with learning and studying instead of just acting like a black box.
+          </p>
+          <p style="margin-top:8px;">
+            I’m always open to feedback, requests, and criticism. I plan to keep updating and improving the tools
+            based on what people need and what’s not working well. If something breaks or could be clearer, I want to know.
+          </p>
+        </section>
+
+        <section>
+          <h2>Future Plans</h2>
+          <p>
+            In the future, I plan to spend time creating additional sites and tools that cover different topics in math
+            and related areas. That could include more specialized calculators, topic-focused helpers, or other study
+            tools aimed at making problem-solving less frustrating and more efficient.
+          </p>
+        </section>
+
+        <section>
+          <h2>Contact</h2>
+          <p>
+            If you find a bug, have a suggestion, or want to request a new feature, you can reach me in two ways:
+          </p>
+          <ul>
+            <li>Use the <strong>&ldquo;Report a Problem / Contact Us&rdquo;</strong> button on the main Arithmetools page.</li>
+            <li>Email me directly at <a href="mailto:oliver.c1639@gmail.com">oliver.c1639@gmail.com</a>.</li>
+          </ul>
+          <p style="margin-top:8px;">
+            I do my best to read and learn from every message so I can keep making Arithmetools more useful over time.
+          </p>
+        </section>
+
+        <div class="back-link">
+          <a href="index.html">&larr; Back to Arithmetools</a>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
